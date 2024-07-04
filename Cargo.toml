@@ -2,6 +2,12 @@
 name = "bevy_pxtxt"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "Create fonts and render text in bevy based on a bitmap source image."
+repository = "https://github.com/Icni/bevy_pxtxt"
+readme = "README.md"
+categories = ["game-development"]
+keywords = ["gamedev", "bevy", "text", "pixelart"]
 
 [features]
 default = ["png"]
