@@ -1,6 +1,6 @@
 [package]
 name = "bevy_pxtxt"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 license = "MIT"
 description = "Create fonts and render text in bevy based on a bitmap source image."
