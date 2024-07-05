@@ -2,7 +2,7 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use crate::pxtext::{PickRect, EventType, PickableText, PxText, PxTextEvent};
 
-pub fn handle_input(
+pub(crate) fn handle_input_system(
     q_text: Query<(Entity, &PxText, &Children)>,
     q_pickable: Query<(&PickableText, &PickRect)>,
     q_windows: Query<&Window, With<PrimaryWindow>>,

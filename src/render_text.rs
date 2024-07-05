@@ -3,7 +3,17 @@ use image::{GenericImage, GenericImageView, Rgba, RgbaImage};
 
 use crate::{pxfont::PxFont, pxtext::{PickRect, PickableText, PxText, WrapMode}};
 
-pub(crate) fn render_text(
+pub(crate) fn prepare_text_system(
+    mut images: ResMut<Assets<Image>>,
+    mut q_text: Query<&mut Handle<Image>, Added<PxText>>
+) {
+    for mut image in q_text.iter_mut() {
+        let handle = images.add(Image::default());
+        *image = handle;
+    }
+}
+
+pub(crate) fn render_text_system(
     fonts: Res<Assets<PxFont>>,
     mut images: ResMut<Assets<Image>>,
     q_text: Query<(&PxText, &Handle<Image>, &Transform, Option<&Children>), Changed<PxText>>,

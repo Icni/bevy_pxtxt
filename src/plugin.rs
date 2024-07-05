@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{input::handle_input, pxfont::{PxFont, PxFontLoader}, pxtext::PxTextEvent, render_text::render_text};
+use crate::{input::handle_input_system, pxfont::{PxFont, PxFontLoader}, pxtext::PxTextEvent, render_text::{prepare_text_system, render_text_system}};
 
 pub struct PxtxtPlugin {
     pub pixel_perfect: bool,
@@ -20,8 +20,9 @@ impl Plugin for PxtxtPlugin {
             .add_event::<PxTextEvent>()
             .init_asset::<PxFont>()
             .init_asset_loader::<PxFontLoader>()
-            .add_systems(Update, handle_input)
-            .add_systems(PostUpdate, render_text);
+            .add_systems(PreUpdate, prepare_text_system)
+            .add_systems(Update, handle_input_system)
+            .add_systems(PostUpdate, render_text_system);
         if self.pixel_perfect {
             app.insert_resource(Msaa::Off);
         }
