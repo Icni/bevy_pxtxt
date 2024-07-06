@@ -5,11 +5,10 @@ use bevy::prelude::*;
 use crate::pxfont::PxFont;
 
 /// This mirrors the `SpriteBundle`, adding text in addition.
-#[derive(Bundle, Clone, Default)]
+#[derive(Debug, Bundle, Clone, Default)]
 pub struct PxTextBundle {
     pub text: PxText,
     pub sprite: Sprite,
-    pub texture: Handle<Image>,
     pub transform: Transform,
     pub global_transform: GlobalTransform,
     pub visibility: Visibility,
@@ -18,7 +17,7 @@ pub struct PxTextBundle {
 }
 
 /// A section of formatted text
-#[derive(Clone, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct PxTextSection {
     pub value: String,
     pub color: Color,
@@ -57,7 +56,7 @@ pub enum WrapMode {
     Truncate,
 }
 
-#[derive(Component, Clone, Default)]
+#[derive(Debug, Component, Clone, Default)]
 pub struct PxText {
     pub sections: Vec<PxTextSection>,
     pub font: Handle<PxFont>,
@@ -114,10 +113,14 @@ impl PxText {
 }
 
 /// Pixel text that can be clicked and hovered on.
-#[derive(Component)]
+#[derive(Debug, Component)]
 pub enum PickableText {
+    /// Sense pick events for a range of characters
     Chars(Range<usize>),
+    /// Sense pick events for a range of sections
     Sections(Range<usize>),
+    /// Sense pick events for the whole text
+    Whole,
 }
 
 impl PickableText {
@@ -172,6 +175,19 @@ impl PickableText {
                 }
 
                 (string, min.unwrap()..index)
+            }
+            PickableText::Whole => {
+                let string = text.sections
+                    .iter()
+                    .flat_map(|s| s.value.chars())
+                    .collect();
+                let len = text.sections
+                    .iter()
+                    .map(|s| s.value.len())
+                    .reduce(|x, y| x + y)
+                    .unwrap_or_default();
+
+                (string, 0..len)
             }
         }
     }

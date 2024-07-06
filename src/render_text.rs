@@ -5,11 +5,12 @@ use crate::{pxfont::PxFont, pxtext::{PickRect, PickableText, PxText, WrapMode}};
 
 pub(crate) fn prepare_text_system(
     mut images: ResMut<Assets<Image>>,
-    mut q_text: Query<&mut Handle<Image>, Added<PxText>>
+    q_text: Query<Entity, Without<Handle<Image>>>,
+    mut commands: Commands,
 ) {
-    for mut image in q_text.iter_mut() {
+    for entity in q_text.iter() {
         let handle = images.add(Image::default());
-        *image = handle;
+        commands.entity(entity).insert(handle);
     }
 }
 
