@@ -48,16 +48,16 @@ fn on_click(
             println!("Left clicked!");
             for (entity, mut sprite) in &mut sprite_query {
                 if entity == ev.entity {
-                    let new_a = sprite.color.a() - 0.1;
-                    sprite.color.set_a(new_a);
+                    let new_a = sprite.color.alpha() - 0.1;
+                    sprite.color.set_alpha(new_a);
                 }
             }
         } else if ev.right_clicked() {
             println!("Right clicked!");
             for (entity, mut sprite) in &mut sprite_query {
                 if entity == ev.entity {
-                    let new_a = sprite.color.a() + 0.1;
-                    sprite.color.set_a(new_a);
+                    let new_a = sprite.color.alpha() + 0.1;
+                    sprite.color.set_alpha(new_a);
                 }
             }
         }

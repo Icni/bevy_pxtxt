@@ -40,7 +40,7 @@ fn setup(
                 PxTextSection::new("ful example of some pixel text.\n\n")
                     .with_color(Color::WHITE),
                 PxTextSection::new("(Using sections for different colors)")
-                    .with_color(Color::GRAY),
+                    .with_color(Color::srgb(0.5, 0.5, 0.5)),
             ], fonts.moonshock.clone()
         ).with_line_spacing(5),
         transform: Transform::from_scale(Vec3::splat(4.0)),

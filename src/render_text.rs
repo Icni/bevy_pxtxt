@@ -27,7 +27,7 @@ pub(crate) fn render_text_system(
         transform,
         children
     ) in &q_text {
-        let font = fonts.get(text.font.clone_weak()).unwrap();
+        let font = fonts.get(&text.font).unwrap();
         let width = text_width(text, font);
         let height = text_height(text, font);
 
@@ -105,15 +105,15 @@ pub(crate) fn render_text_system(
                         }
                     }
 
-                    let rgba = section.color.as_rgba_f32();
+                    let rgba = section.color.to_srgba();
                     for i in x_min..=x + glyph.src_rect.width() {
                         for j in y..=y + glyph.src_rect.height() {
                             let px = output[(i, j)];
                             output[(i, j)] = Rgba::from([
-                                (rgba[0] * px[0] as f32) as u8,
-                                (rgba[1] * px[1] as f32) as u8,
-                                (rgba[2] * px[2] as f32) as u8,
-                                (rgba[3] * px[3] as f32) as u8,
+                                (rgba.red * px[0] as f32) as u8,
+                                (rgba.green * px[1] as f32) as u8,
+                                (rgba.blue * px[2] as f32) as u8,
+                                (rgba.alpha * px[3] as f32) as u8,
                             ]);
                         }
                     }
@@ -158,7 +158,7 @@ pub(crate) fn render_text_system(
         if let Some(children) = children {
             for child in children.iter() {
                 if let Ok(pickable) = q_pickable.get(*child) {
-                    let font = fonts.get(text.font.clone_weak()).unwrap();
+                    let font = fonts.get(&text.font).unwrap();
                     let mut x = corner.x;
                     let mut y = corner.y;
                     let mut idx = 0;
