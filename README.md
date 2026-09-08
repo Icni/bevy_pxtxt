@@ -119,7 +119,12 @@ See `examples/sections.rs` (above as well) for how different sections can be use
 
 ## Compatibility
 
-Bevy Pxtxt version `0.1` is comptabile with Bevy version `0.13`.
+| Bevy version | bevy_pxtx version |
+| ------------ | ----------------- |
+| 0.19.1       | 0.7               |
+| 0.18.1       | 0.6               |
+| 0.14         | 0.2               |
+| 0.13         | 0.1               |
 
 ## License
 
