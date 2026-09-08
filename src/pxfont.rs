@@ -40,7 +40,7 @@ pub enum PxFontLoadError {
     MissingDescender,
 }
 
-#[derive(Default)]
+#[derive(Default, TypePath)]
 pub struct PxFontLoader;
 
 impl AssetLoader for PxFontLoader {
