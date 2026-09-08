@@ -53,7 +53,7 @@ impl AssetLoader for PxFontLoader {
             reader: &mut dyn bevy::asset::io::Reader,
             _settings: &Self::Settings,
             _load_context: &mut bevy::asset::LoadContext,
-        ) -> impl bevy::utils::ConditionalSendFuture<Output = Result<Self::Asset, Self::Error>> {
+        ) -> impl bevy::tasks::ConditionalSendFuture<Output = Result<Self::Asset, Self::Error>> {
         Box::pin(async move {
             let mut bytes = Vec::new();
             reader.read_to_end(&mut bytes).await?;

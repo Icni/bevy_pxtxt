@@ -19,20 +19,22 @@ tiff = ["image/tiff"]
 
 [dependencies]
 ahash = "0.8.12"
-bevy = { version = "0.15", default-features = false, features = [
+bevy = { version = "0.16", default-features = false, features = [
   "bevy_asset",
   "bevy_render",
   "bevy_sprite",
   "bevy_window",
   "bevy_image",
+  "detailed_trace",
 ] }
 image = "0.25.10"
 serde = "1.0.229"
 ron = "0.12.2"
 thiserror = "2.0.20"
+tracing = "0.1.44"
 
 [dev-dependencies]
-bevy = { version = "0.15", default-features = false, features = [
+bevy = { version = "0.16", default-features = false, features = [
   "bevy_asset",
   "bevy_render",
   "bevy_sprite",
@@ -43,7 +45,7 @@ bevy = { version = "0.15", default-features = false, features = [
   "x11",
   "wayland",
 ] }
-bevy_asset_loader = { version = "0.22.0", features = ["2d"] }
+bevy_asset_loader = { version = "0.23.0", features = ["2d"] }
 
 [[example]]
 name = "bounded"

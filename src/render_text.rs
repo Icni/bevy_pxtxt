@@ -1,4 +1,8 @@
 use bevy::{
+    image::{
+        Image,
+        ImageSampler
+    },
     prelude::*,
     render::{
         render_asset::RenderAssetUsages,
@@ -7,9 +11,7 @@ use bevy::{
             TextureDimension,
             TextureFormat
         },
-    },
-    image::ImageSampler,
-    image::Image
+    }
 };
 use image::{GenericImage, GenericImageView, Rgba, RgbaImage};
 
@@ -94,7 +96,7 @@ pub(crate) fn render_text_system(
                             glyph.src_rect.width() + 1,
                             glyph.src_rect.height() + 1,
                         ), x, y) {
-                        error!("Image error: {e}");
+                        tracing::error!("Image error: {e}");
                     }
 
                     let x_min = if first_after_space {
@@ -167,7 +169,7 @@ pub(crate) fn render_text_system(
 
         if let Some(children) = children {
             for child in children.iter() {
-                if let Ok(pickable) = q_pickable.get(*child) {
+                if let Ok(pickable) = q_pickable.get(child) {
                     let font = fonts.get(&text.font).unwrap();
                     let mut x = corner.x;
                     let mut y = corner.y;
@@ -233,7 +235,7 @@ pub(crate) fn render_text_system(
                         }
                     }
 
-                    commands.entity(*child).insert(PickRect(rects));
+                    commands.entity(child).insert(PickRect(rects));
                 }
             }
         }
@@ -268,7 +270,7 @@ fn text_width(text: &PxText, font: &PxFont) -> u32 {
             } else if let Some(glyph) = font.char_map.get(&c) {
                 line_width += glyph.src_rect.width() + 1;
             } else {
-                error!("The font {} does not contain the character {c}", font.name);
+                tracing::error!("The font {} does not contain the character {c}", font.name);
             }
         }
     }

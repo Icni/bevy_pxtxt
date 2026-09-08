@@ -13,6 +13,7 @@ pub(crate) fn handle_input_system(
     let (camera, camera_transform) = q_camera.iter().next().unwrap();
     if let Some(cursor_pos) = q_windows
         .single()
+        .expect("no window found in handle input system")
         .cursor_position()
         .and_then(|cursor|
             camera.viewport_to_world_2d(camera_transform, cursor).ok()
@@ -22,7 +23,7 @@ pub(crate) fn handle_input_system(
                 if let Ok((
                     pickable,
                     rects
-                )) = q_pickable.get(*child) {
+                )) = q_pickable.get(child) {
                     let (value, range) = pickable.get_string(text);
 
                     for rect in &rects.0 {
@@ -39,7 +40,7 @@ pub(crate) fn handle_input_system(
                                 EventType::Hover
                             };
 
-                            pick_evw.send(PxTextEvent {
+                            pick_evw.write(PxTextEvent {
                                 entity,
                                 range: range.clone(),
                                 value: value.clone(),
