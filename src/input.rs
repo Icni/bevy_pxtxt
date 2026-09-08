@@ -15,7 +15,7 @@ pub(crate) fn handle_input_system(
         .single()
         .cursor_position()
         .and_then(|cursor|
-            camera.viewport_to_world_2d(camera_transform, cursor)
+            camera.viewport_to_world_2d(camera_transform, cursor).ok()
         ) {
         for (entity, text, children) in q_text.iter() {
             for child in children.iter() {

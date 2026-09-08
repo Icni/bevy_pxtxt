@@ -12,7 +12,6 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, PxtxtPlugin::default()))
         .init_collection::<PxFontCollection>()
-        .insert_resource(Msaa::Off)
         .add_systems(Startup, setup)
         .add_systems(Update, on_click)
         .run();
@@ -22,7 +21,7 @@ fn setup(
     fonts: Res<PxFontCollection>,
     mut commands: Commands,
 ) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn((Camera2d::default(), Msaa::Off));
     commands.spawn(PxTextBundle {
         text: PxText::from_sections(
             vec![

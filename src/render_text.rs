@@ -1,32 +1,42 @@
-use bevy::{prelude::*, render::{render_asset::RenderAssetUsages, render_resource::{Extent3d, TextureDimension, TextureFormat}, texture::ImageSampler}};
+use bevy::{
+    prelude::*,
+    render::{
+        render_asset::RenderAssetUsages,
+        render_resource::{
+            Extent3d,
+            TextureDimension,
+            TextureFormat
+        },
+    },
+    image::ImageSampler,
+    image::Image
+};
 use image::{GenericImage, GenericImageView, Rgba, RgbaImage};
 
 use crate::{pxfont::PxFont, pxtext::{PickRect, PickableText, PxText, WrapMode}};
 
 pub(crate) fn prepare_text_system(
     mut images: ResMut<Assets<Image>>,
-    q_text: Query<Entity, Without<Handle<Image>>>,
-    mut commands: Commands,
+    mut q_text: Query<&mut Sprite, Added<PxText>>,
 ) {
-    for entity in q_text.iter() {
-        let handle = images.add(Image::default());
-        commands.entity(entity).insert(handle);
+    for mut sprite in &mut q_text {
+        sprite.image = images.add(Image::default());
     }
 }
 
 pub(crate) fn render_text_system(
     fonts: Res<Assets<PxFont>>,
     mut images: ResMut<Assets<Image>>,
-    q_text: Query<(&PxText, &Handle<Image>, &Transform, Option<&Children>), Changed<PxText>>,
+    mut q_text: Query<(&PxText, &mut Sprite, &Transform, Option<&Children>), Changed<PxText>>,
     q_pickable: Query<&PickableText>,
     mut commands: Commands,
 ) {
     for (
         text,
-        handle,
+        mut sprite,
         transform,
         children
-    ) in &q_text {
+    ) in &mut q_text {
         let font = fonts.get(&text.font).unwrap();
         let width = text_width(text, font);
         let height = text_height(text, font);
@@ -228,7 +238,7 @@ pub(crate) fn render_text_system(
             }
         }
 
-        *images.get_mut(handle).unwrap() = image;
+        *images.get_mut(&mut sprite.image).unwrap() = image;
     }
 }
 

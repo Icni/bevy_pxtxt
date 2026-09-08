@@ -14,7 +14,7 @@ impl Plugin for PxtxtPlugin {
             .add_systems(Update, (
                 prepare_text_system,
                 handle_input_system,
-            ))
+            ).chain())
             .add_systems(PostUpdate, render_text_system);
     }
 }
