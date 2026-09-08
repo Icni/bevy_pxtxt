@@ -1,11 +1,11 @@
 use bevy::{
+    asset::RenderAssetUsages,
     image::{
         Image,
         ImageSampler
     },
     prelude::*,
     render::{
-        render_asset::RenderAssetUsages,
         render_resource::{
             Extent3d,
             TextureDimension,
