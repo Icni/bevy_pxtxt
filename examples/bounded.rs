@@ -12,7 +12,6 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, PxtxtPlugin::default()))
         .init_collection::<PxFontCollection>()
-        .insert_resource(Msaa::Off)
         .add_systems(Startup, setup)
         .run();
 }
@@ -23,7 +22,7 @@ fn setup(
 ) {
     const GRAY: Color = Color::srgb(0.5, 0.5, 0.5);
 
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn((Camera2d::default(), Msaa::Off));
     commands.spawn(PxTextBundle {
         text: PxText::from_sections(
             vec![

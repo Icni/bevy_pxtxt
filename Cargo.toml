@@ -1,6 +1,6 @@
 [package]
 name = "bevy_pxtxt"
-version = "0.2.0"
+version = "0.7.0"
 edition = "2021"
 license = "MIT"
 description = "Create fonts and render text in bevy based on a bitmap source image."
@@ -18,26 +18,34 @@ gif = ["image/gif"]
 tiff = ["image/tiff"]
 
 [dependencies]
-ahash = "0.8.11"
-bevy = { version = "0.14", default-features = false, features = [
-    "bevy_asset", "bevy_render", "bevy_sprite"
+ahash = "0.8.12"
+bevy = { version = "0.19.1", default-features = false, features = [
+  "bevy_asset",
+  "bevy_image",
+  "bevy_render",
+  "bevy_sprite_render",
+  "bevy_window",
+  "detailed_trace",
 ] }
-image = "0.25.1"
-serde = "1.0.203"
-ron = "0.8.1"
-thiserror = "1.0.61"
+image = "0.25.10"
+serde = "1.0.229"
+ron = "0.12.2"
+thiserror = "2.0.20"
+tracing = "0.1.44"
 
 [dev-dependencies]
-bevy = { version = "0.14", default-features = false, features = [
+bevy = { version = "0.19.1", default-features = false, features = [
   "bevy_asset",
+  "bevy_image",
   "bevy_render",
-  "bevy_sprite",
+  "bevy_sprite_render",
+  "bevy_window",
   "bevy_core_pipeline",
   "multi_threaded",
   "x11",
   "wayland",
 ] }
-bevy_asset_loader = { version = "0.21.0", features = ["2d"] }
+bevy_asset_loader = { version = "0.27.0", features = ["2d"] }
 
 [[example]]
 name = "bounded"

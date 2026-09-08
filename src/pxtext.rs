@@ -147,7 +147,7 @@ impl PickableText {
                 }
 
                 if min.is_none() {
-                    error!("Pickable r is out of range!");
+                    tracing::error!("Pickable r is out of range!");
                 }
 
                 (string, min.unwrap()..index)
@@ -171,7 +171,7 @@ impl PickableText {
                 }
 
                 if min.is_none() {
-                    error!("Pickable r is out of range!");
+                    tracing::error!("Pickable r is out of range!");
                 }
 
                 (string, min.unwrap()..index)

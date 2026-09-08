@@ -39,7 +39,6 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, PxtxtPlugin::default()))
         .init_collection::<PxFontCollection>()
-        .insert_resource(Msaa::Off)
         .add_systems(Startup, setup)
         .run();
 }
@@ -48,7 +47,7 @@ fn setup(
     fonts: Res<PxFontCollection>,
     mut commands: Commands,
 ) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn((Camera2d::default(), Msaa::Off));
     commands.spawn(PxTextBundle {
         text: PxText::from_sections(
             vec![
@@ -67,7 +66,7 @@ fn setup(
                 PxTextSection::new("ful example of some pixel text.\n\n")
                     .with_color(Color::WHITE),
                 PxTextSection::new("(Using sections for different colors)")
-                    .with_color(Color::GRAY),
+                    .with_color(Color::srgb(0.5, 0.5, 0.5)),
             ], fonts.moonshock.clone()
         ).with_line_spacing(5),
         transform: Transform::from_scale(Vec3::splat(4.0)),
@@ -119,7 +118,12 @@ See `examples/sections.rs` (above as well) for how different sections can be use
 
 ## Compatibility
 
-Bevy Pxtxt version `0.1` is comptabile with Bevy version `0.13`.
+| Bevy version | bevy_pxtx version |
+| ------------ | ----------------- |
+| 0.19.1       | 0.7               |
+| 0.18.1       | 0.6               |
+| 0.14         | 0.2               |
+| 0.13         | 0.1               |
 
 ## License
 

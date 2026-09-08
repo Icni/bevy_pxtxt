@@ -1,7 +1,7 @@
 use std::{fs::File, io::BufReader, path::PathBuf};
 
 use ahash::AHashMap;
-use bevy::{asset::{Asset, AssetLoader, AsyncReadExt}, math::URect, reflect::TypePath};
+use bevy::{asset::{Asset, AssetLoader}, math::URect, reflect::TypePath};
 use image::{ImageFormat, Rgba, RgbaImage};
 use thiserror::Error;
 
@@ -40,7 +40,7 @@ pub enum PxFontLoadError {
     MissingDescender,
 }
 
-#[derive(Default)]
+#[derive(Default, TypePath)]
 pub struct PxFontLoader;
 
 impl AssetLoader for PxFontLoader {
@@ -48,12 +48,12 @@ impl AssetLoader for PxFontLoader {
     type Settings = ();
     type Error = PxFontLoadError;
 
-    fn load<'a>(
-            &'a self,
-            reader: &'a mut bevy::asset::io::Reader,
-            _settings: &'a Self::Settings,
-            _load_context: &'a mut bevy::asset::LoadContext,
-        ) -> impl bevy::utils::ConditionalSendFuture<Output = Result<Self::Asset, Self::Error>> {
+    fn load(
+            &self,
+            reader: &mut dyn bevy::asset::io::Reader,
+            _settings: &Self::Settings,
+            _load_context: &mut bevy::asset::LoadContext,
+        ) -> impl bevy::tasks::ConditionalSendFuture<Output = Result<Self::Asset, Self::Error>> {
         Box::pin(async move {
             let mut bytes = Vec::new();
             reader.read_to_end(&mut bytes).await?;

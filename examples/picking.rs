@@ -12,9 +12,8 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, PxtxtPlugin::default()))
         .init_collection::<PxFontCollection>()
-        .insert_resource(Msaa::Off)
         .add_systems(Startup, setup)
-        .add_systems(Update, on_click)
+        .add_observer(on_click)
         .run();
 }
 
@@ -22,7 +21,7 @@ fn setup(
     fonts: Res<PxFontCollection>,
     mut commands: Commands,
 ) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn((Camera2d::default(), Msaa::Off));
     commands.spawn(PxTextBundle {
         text: PxText::from_sections(
             vec![
@@ -40,25 +39,24 @@ fn setup(
 }
 
 fn on_click(
-    mut clicked_text_evr: EventReader<PxTextEvent>,
+    trigger: On<PxTextEvent>,
     mut sprite_query: Query<(Entity, &mut Sprite)>,
 ) {
-    for ev in clicked_text_evr.read() {
-        if ev.left_clicked() {
-            println!("Left clicked!");
-            for (entity, mut sprite) in &mut sprite_query {
-                if entity == ev.entity {
-                    let new_a = sprite.color.alpha() - 0.1;
-                    sprite.color.set_alpha(new_a);
-                }
+    let ev = trigger.event();
+    if ev.left_clicked() {
+        println!("Left clicked!");
+        for (entity, mut sprite) in &mut sprite_query {
+            if entity == ev.entity {
+                let new_a = sprite.color.alpha() - 0.1;
+                sprite.color.set_alpha(new_a);
             }
-        } else if ev.right_clicked() {
-            println!("Right clicked!");
-            for (entity, mut sprite) in &mut sprite_query {
-                if entity == ev.entity {
-                    let new_a = sprite.color.alpha() + 0.1;
-                    sprite.color.set_alpha(new_a);
-                }
+        }
+    } else if ev.right_clicked() {
+        println!("Right clicked!");
+        for (entity, mut sprite) in &mut sprite_query {
+            if entity == ev.entity {
+                let new_a = sprite.color.alpha() + 0.1;
+                sprite.color.set_alpha(new_a);
             }
         }
     }

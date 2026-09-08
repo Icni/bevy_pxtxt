@@ -1,32 +1,44 @@
-use bevy::{prelude::*, render::{render_asset::RenderAssetUsages, render_resource::{Extent3d, TextureDimension, TextureFormat}, texture::ImageSampler}};
+use bevy::{
+    asset::RenderAssetUsages,
+    image::{
+        Image,
+        ImageSampler
+    },
+    prelude::*,
+    render::{
+        render_resource::{
+            Extent3d,
+            TextureDimension,
+            TextureFormat
+        },
+    }
+};
 use image::{GenericImage, GenericImageView, Rgba, RgbaImage};
 
 use crate::{pxfont::PxFont, pxtext::{PickRect, PickableText, PxText, WrapMode}};
 
 pub(crate) fn prepare_text_system(
     mut images: ResMut<Assets<Image>>,
-    q_text: Query<Entity, Without<Handle<Image>>>,
-    mut commands: Commands,
+    mut q_text: Query<&mut Sprite, Added<PxText>>,
 ) {
-    for entity in q_text.iter() {
-        let handle = images.add(Image::default());
-        commands.entity(entity).insert(handle);
+    for mut sprite in &mut q_text {
+        sprite.image = images.add(Image::default());
     }
 }
 
 pub(crate) fn render_text_system(
     fonts: Res<Assets<PxFont>>,
     mut images: ResMut<Assets<Image>>,
-    q_text: Query<(&PxText, &Handle<Image>, &Transform, Option<&Children>), Changed<PxText>>,
+    mut q_text: Query<(&PxText, &mut Sprite, &Transform, Option<&Children>), Changed<PxText>>,
     q_pickable: Query<&PickableText>,
     mut commands: Commands,
 ) {
     for (
         text,
-        handle,
+        mut sprite,
         transform,
         children
-    ) in &q_text {
+    ) in &mut q_text {
         let font = fonts.get(&text.font).unwrap();
         let width = text_width(text, font);
         let height = text_height(text, font);
@@ -84,7 +96,7 @@ pub(crate) fn render_text_system(
                             glyph.src_rect.width() + 1,
                             glyph.src_rect.height() + 1,
                         ), x, y) {
-                        error!("Image error: {e}");
+                        tracing::error!("Image error: {e}");
                     }
 
                     let x_min = if first_after_space {
@@ -157,7 +169,7 @@ pub(crate) fn render_text_system(
 
         if let Some(children) = children {
             for child in children.iter() {
-                if let Ok(pickable) = q_pickable.get(*child) {
+                if let Ok(pickable) = q_pickable.get(child) {
                     let font = fonts.get(&text.font).unwrap();
                     let mut x = corner.x;
                     let mut y = corner.y;
@@ -223,12 +235,12 @@ pub(crate) fn render_text_system(
                         }
                     }
 
-                    commands.entity(*child).insert(PickRect(rects));
+                    commands.entity(child).insert(PickRect(rects));
                 }
             }
         }
 
-        *images.get_mut(handle).unwrap() = image;
+        *images.get_mut(&mut sprite.image).unwrap() = image;
     }
 }
 
@@ -258,7 +270,7 @@ fn text_width(text: &PxText, font: &PxFont) -> u32 {
             } else if let Some(glyph) = font.char_map.get(&c) {
                 line_width += glyph.src_rect.width() + 1;
             } else {
-                error!("The font {} does not contain the character {c}", font.name);
+                tracing::error!("The font {} does not contain the character {c}", font.name);
             }
         }
     }
