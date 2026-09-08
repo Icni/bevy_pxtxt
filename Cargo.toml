@@ -24,7 +24,7 @@ bevy = { version = "0.14", default-features = false, features = [
 ] }
 image = "0.25.1"
 serde = "1.0.203"
-ron = "0.8.1"
+ron = "0.12.2"
 thiserror = "2.0.20"
 
 [dev-dependencies]
